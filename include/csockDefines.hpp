@@ -5,8 +5,10 @@
 #include "csockPlatform.hpp"
 
 typedef int FILE_DESCRIPTOR;
-#define DIRECT_INIT
-#define CONFIG_INIT
+#define CSOCK_DIRECT_INIT
+#define CSOCK_CONFIG_INIT
+#define CSOCK_IP_STRLEN 16  //'255.255.255.255' + '\0' 
+                            // 3+1+3+1+3+1+3+1  +  1 => 16byte MAX
 
 enum CSOCK_INIT{
     IPV4 = AF_INET,
@@ -22,7 +24,8 @@ enum CSOCK_OPTIONS{
 enum CSOCK_DEFAULT_PARAMS{
     CSOCK_DEFAULT_BACKLOG = 5,
     CSOCK_DEFAULT_SLEEP = 5,
-    CSOCK_DEFAULT_PORT = 8085
+    CSOCK_DEFAULT_PORT = 8085,
+    CSOCK_DEFAULT_IFADDRS_COUNT = 5
 };
 
 enum CSOCK_INFO_LEVEL{
