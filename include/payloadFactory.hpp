@@ -36,15 +36,15 @@ private:
 
     
 public:
-    PayloadFactory(TEM_TARGET_OS targetSystem);
+    PayloadFactory(TEM_TARGET_OS targetSystem);             //tcp_ipv4 olarak otomatik baslatma
     PayloadFactory(TEM_TARGET_OS targetSystem,CSOCK_INIT init_ipv4v6,CSOCK_INIT init_tcp_udp,const std::string rsIP , uint rsPortNo);
      ~PayloadFactory();
-    //burada belirtilen hedef sisteme gore payload uretilecek
+
+    void setIP_Port(const std::string &rsIP,uint rsPort);   //port manuel yapilandirma
 
     //createPayloadRuntime{reverse_shell,{"127.0.0.1",1337}}
     bool createPayloadRuntime(const std::string payload_name, std::vector<std::string> &args); //YURUTULEBILIR DOSYALAR FONKSIYONLAR
     bool createPayloadExecutable(std::string &payload_name , std::vector<std::string> &args,std::string &outputPath);
-    bool setIP_Port(const std::string &rsIP,uint rsPort);                                      //reverse shell yapilandirma
 
 
 };

