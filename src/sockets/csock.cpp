@@ -168,7 +168,7 @@ sockaddr_in* csock::setConnectedServerConfig(const char *connectIpAddr, unsigned
 
 
 
-bool csock::serverResponser(bool isInputed,const char *msgTitle,const char *loopMsg){
+bool csock::serverResponser(bool printOut,bool isInputed,const char *msgTitle,const char *loopMsg){
     if(isServer){
         int listenStaus = listen(this->socketFD,this->serverBacklog);
         if(listenStaus == -1){
@@ -178,7 +178,10 @@ bool csock::serverResponser(bool isInputed,const char *msgTitle,const char *loop
 
         //server requester loop
         int sendedBytes = 0;
-        std::cout << msgTitle << std::endl;
+        if(printOut)
+            std::cout << msgTitle << std::endl;
+
+
         std::string responseMessageFromServer;
         while(1){
             std::cout << loopMsg << "\n";
@@ -197,8 +200,10 @@ bool csock::serverResponser(bool isInputed,const char *msgTitle,const char *loop
                     csockManuel::csockMessage("CLIENT CONNECTION LOSTED",CSOCK_INFO,"BASE");
                     break; //mevcut client baglantisini islemeyi biraktik
                 }
-                    
-                std::cout << "ALINAN BYTE : " << reciviedBytes << "\n";
+                
+                if(printOut)
+                    std::cout << "ALINAN BYTE : " << reciviedBytes << "\n";
+                
                 if(!isInputed)
                     responseMessageFromServer = "SERVER OTOMATIK MESAJI KULLANICI GIRDISIZ";
                 else{
@@ -208,13 +213,17 @@ bool csock::serverResponser(bool isInputed,const char *msgTitle,const char *loop
                 } 
                 sendedBytes = sendData(responseMessageFromServer.c_str());
 
-                std::cout << "GONDERILEN MESAJ : " << responseMessageFromServer << "\n";    
-                std::cout << "GONDERILEN BYTE : " << send << "\n";
-                std::cout << "GELEN MESAJ     : " << buffer << "\n";
+                if(printOut){
+                    std::cout << "GONDERILEN MESAJ : " << responseMessageFromServer << "\n";    
+                    std::cout << "GONDERILEN BYTE : " << send << "\n";
+                    std::cout << "GELEN MESAJ     : " << buffer << "\n";
+                    
+                }
                 
                 csockManuel::csock_inetNtop(initIP_V4_V6,&connectedClientConfig.sin_addr,buffer);
-    
-                DEBUG("FILE DESCRIPTOR : " << clientFD << " STR_IP : " << buffer);
+                
+                if(printOut)
+                    DEBUG("FILE DESCRIPTOR : " << clientFD << " STR_IP : " << buffer);
             }
             
         }
@@ -291,6 +300,47 @@ void csock::serverNewConnectionProcessThread(bool isInputed,int newClientFD){
         DEBUG("FILE DESCRIPTOR : " << newClientFD << " STR_IP : " << buffer); 
     }
 
+}
+
+bool csock::serverResponser(const char *loopMsg,bool isPrintOut){
+    if(!isServer){
+        csockManuel::csockMessage("SOCKET NOT SERVER MODE");
+        return false;
+    }
+
+    int listenStatus = listen(this->socketFD,this->serverBacklog);
+    if(listenStatus == -1){
+        csockManuel::csockMessage("SERVER NOT LISTENING !",CSOCK_ERROR,"BASE");
+        return false;
+    }
+
+    int clientFD = csock_accept(socketFD,&connectedClientConfig,&t_clientConnected);
+    if(clientFD == -1){
+        csockManuel::csockMessage("SERVER NOT FOUND REQUEST !",CSOCK_ERROR,"BASE");
+        return false;
+    }
+
+    std::cout << "1 ENDPOINT ACCEPTED !" << "\n";
+
+    char buffer[1024];
+    while(1){
+        std::cout << loopMsg << ":";
+        fflush(stdout);
+
+        //girdi alma
+        memset(buffer,0,sizeof(buffer));
+        fgets(buffer,sizeof(buffer),stdin);
+        csock_send(clientFD,buffer,strlen(buffer));
+
+
+        //veri gelmesi
+        memset(buffer,0,sizeof(buffer));
+        csock_recv(clientFD,buffer,sizeof(buffer));
+        std::cout << "[BUFFER] : " << buffer << "\n";
+    }
+
+
+    return true;
 }
 
 
@@ -490,8 +540,6 @@ void csock::allSockets(){
         std::boolalpha << " | IS_SERVER_SOCKET = " << pair.second << "\n";
     }
 }
-
-
 
 
 

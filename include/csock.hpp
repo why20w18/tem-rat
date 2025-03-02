@@ -36,7 +36,7 @@ private:
 
 public:
     CSOCK_CONFIG_INIT csock();                                 //default olarak ipv4 ve tcp konfigurasyonu ile baslatma  ->server or client
-    csock(CSOCK_INIT tcp_udp , CSOCK_INIT ipv4_ipv6);//soketi manuel olarak yapilandirma ->server or client
+    csock(CSOCK_INIT tcp_udp , CSOCK_INIT ipv4_ipv6);          //soketi manuel olarak yapilandirma ->server or client
     csock(CSOCK_INIT tcp_udp , CSOCK_INIT ipv4_ipv6,const char *connectIP,unsigned int connectPortNo
     ,CSOCK_CONNECTION_OPTIONS clientConnectType=CSOCK_ONCE); //->client
     ~csock();                                                                     //destructor
@@ -50,8 +50,11 @@ public:
   
    
     bool bindServerSock();
-    bool serverResponser(bool isInputed = false,const char *msgTitle = "[CSOCK] SERVER LISTENING ...",const char *loopMsg = "1 ENDPOINT ACCEPTED");
+    bool serverResponser(bool isPrintOut,bool isInputed=false,const char *msgTitle = "[CSOCK] SERVER LISTENING ...",const char *loopMsg = "1 ENDPOINT ACCEPTED");
     bool serverResponserThread(bool isInputed = false,const char *msgTitle = "[CSOCK] SERVER LISTENING ...",const char *loopMsg = "1 ENDPOINT ACCEPTED");
+
+    //basic veri alacak ve veri gonderecek sekilde yazilmis responser
+    bool serverResponser(const char *loopMsg,bool isPrintOut = false);
     
 
     CSOCK_CONFIG_INIT bool connectServer();   //konfigurasyondan sonra baslatma

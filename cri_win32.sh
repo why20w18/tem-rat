@@ -24,6 +24,6 @@ elif [ "$1" == "install" ]; then
     rm -rf utils-WIN32.zip
 
 elif [ "$1" == "r" ] || [ "$1" == "run" ]; then
-	wine ./build-win32/CSOCK.exe
+	wine ./build-win32/TEM_RAT.exe
 
 fi

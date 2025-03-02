@@ -24,6 +24,6 @@ elif [ "$1" == "debug-compile" ] || [ "$1" == "dc" ]; then
     echo "::::::::::Linux debug finished::::::::::"
 
 elif [ "$1" == "run" ] || [ "$1" == "r" ]; then 
-    ./build/CSOCK
+    ./build/TEM_RAT
 
 fi
