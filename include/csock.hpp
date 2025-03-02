@@ -78,7 +78,10 @@ public:
     void clientRequesterThread(int newClientFD,bool isClientInputed = false);
     
 
+    bool setConnectIP(const char *newServerIP);
+    bool setConnectPortNo(uint newServerPortNo);
 
+    
 
     int getSocketFD();                                              //nesnenin kendisine atanmis soketi cevirir
     int* active();

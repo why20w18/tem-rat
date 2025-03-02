@@ -72,6 +72,13 @@ std::vector<std::vector<std::string>> utils_getLAN_IPV4(bool isPrintOut){
         PIP_ADAPTER_INFO pAdapter = NULL;
         DWORD dwRetVal = 0;
         
+        if (isPrintOut){
+            std::cout << std::setw(10) << std::left << "No"
+                      << std::setw(15) << std::left << "Interface"
+                      << std::setw(20) << std::left << "IP Address" << "\n";
+            std::cout << "--------------------------------------------" << "\n";
+        }
+
     
         ULONG ulOutBufLen = sizeof (IP_ADAPTER_INFO);
         pAdapterInfo = (IP_ADAPTER_INFO *) MALLOC(sizeof (IP_ADAPTER_INFO));
@@ -91,10 +98,6 @@ std::vector<std::vector<std::string>> utils_getLAN_IPV4(bool isPrintOut){
             pAdapter = pAdapterInfo;
             while (pAdapter){
 
-                if(isPrintOut){
-                printf("No:[%d]\t\t\t",i);
-                printf("Type:");
-                }
                 
                 switch (pAdapter->Type) {
                 case MIB_IF_TYPE_OTHER:
@@ -147,6 +150,8 @@ std::vector<std::vector<std::string>> utils_getLAN_IPV4(bool isPrintOut){
                 }
     
             printf("\tIP Address: %s\n",pAdapter->IpAddressList.IpAddress.String);
+
+
                
             interfaceIPV4[i++].push_back(pAdapter->IpAddressList.IpAddress.String);        
             pAdapter = pAdapter->Next;

@@ -17,7 +17,8 @@ SET(DIZIN_SRC ${CMAKE_SOURCE_DIR}/src)
 SET(DIZIN_INCLUDE ${CMAKE_SOURCE_DIR}/include)
 
 SET(PROGRAM_SRC
-    ${DIZIN_SRC}/main.cpp
+    #${DIZIN_SRC}/main.cpp #for tem_rat_server
+    ${DIZIN_SRC}/mainClient.cpp #for tem_rat_payload_client
 
     ${DIZIN_SRC}/sockets/csock.cpp
     ${DIZIN_SRC}/sockets/csockManuel.cpp

@@ -5,10 +5,12 @@
 
     #ifdef CSOCK_PLATFORM_IS_UNIX
         #define TEM_HOST 0
+        #define TEM_HOST_IS_UNIX
     #endif 
 
     #ifdef CSOCK_PLATFORM_IS_WIN32
         #define TEM_HOST 1
+        #define TEM_HOST_IS_WIN32
     #endif 
 
 enum TEM_BACKDOOR_MODES{

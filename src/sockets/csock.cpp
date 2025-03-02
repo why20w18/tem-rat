@@ -512,6 +512,27 @@ void csock::setClientConnection(CSOCK_CONNECTION_OPTIONS once_stay){
 }
 
 
+bool csock::setConnectIP(const char *newServerIP){
+    if(isServer){
+        csockManuel::csockMessage("SOCKET IS SERVER MODE !",CSOCK_WARNING,"BASE");
+        return false;
+    }
+
+    this->connectedClientConfig.sin_addr.s_addr = inet_addr(newServerIP);
+    return true;
+}
+
+bool csock::setConnectPortNo(uint newServerPortNo){
+    if(isServer){
+        csockManuel::csockMessage("SOCKET IS SERVER MODE !",CSOCK_WARNING,"BASE");
+        return false;
+    }
+
+    this->connectedClientConfig.sin_port = htons(newServerPortNo);
+    return true;
+}
+
+
 
 //soketi yapilandirmaya baglama ama server
 bool csock::bindServerSock(){
@@ -541,5 +562,7 @@ void csock::allSockets(){
     }
 }
 
-
+int csock::getSocketFD(){
+    return this->socketFD;
+}
 
